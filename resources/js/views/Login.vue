@@ -77,14 +77,20 @@ export default {
 
     .login-form .wrapper {
         background: #ffffffcc;
-        border-radius: 6px;
+        border-radius: 20px;
         position: relative;
         display: flex;
-        width:50%;
+        width:400px;
         height: 40%;
         margin: auto auto;
         flex-direction: column;
         align-items: flex-end;
+    }
+
+    @media screen and (max-width: 400px) {
+        .login-form .wrapper {
+            width: 95%;
+        }
     }
 
     .login-form .wrapper .buttons-block {
@@ -95,7 +101,7 @@ export default {
     }
 
     .login-form .wrapper .buttons-block .form-control{
-        margin: 10px 10px
+        margin: 10px 0px
     }
 
     .login-form .wrapper .buttons-block .error{
