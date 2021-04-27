@@ -17,8 +17,6 @@ Route::group(['prefix' => 'bot', 'middleware' => 'web'], function () {
     Route::post('webhook', 'BotController@index');
 });
 
-#Route::post('/collector/set', 'CollectorController@ReceiveDataFromSensor');
-
 Route::post('/auth/login', 'AuthController@login');
 
 Route::middleware(['auth:api'])->group(function() {
@@ -29,7 +27,3 @@ Route::middleware(['auth:api'])->group(function() {
 });
 
 Route::get('/{any}', 'SpaController@index')->where('any', '.*');
-
-#Route::get('/', function () {
-#    return view('welcome');
-#});

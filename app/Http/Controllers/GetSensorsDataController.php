@@ -52,16 +52,12 @@ class GetSensorsDataController extends BaseBotController
                            ->select('patients.*', 'sensors.name as sensor_name', 'sensors.ip as sensor_ip')
                            ->get()->toArray();
 
-            Log::info($patients);
-
             $answer = "Данные с датчиков:\n";
 
             foreach ($patients as $patient) {
                 $answer = $answer."\n$patient->surname $patient->name $patient->patronymic\n";
                 foreach($fields as $field => $field_config) {
                     $answer = $answer."  $field:\n";
-
-                    Log::info($answer);
 
                     $query = "from(bucket: \"{$bucket}\")
                     |> range(start: -$time"."s)
@@ -98,8 +94,6 @@ class GetSensorsDataController extends BaseBotController
                     }
                 }
             }
-    
-            Log::info($answer);
     
             $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML');
         }

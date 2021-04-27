@@ -1,7 +1,7 @@
  <template>
   <div>
     <header>
-      <b-navbar toggleable="lg" type="light" variant="light" sticky>
+      <b-navbar toggleable="lg" type="dark" variant="dark" sticky>
         <router-link class="nav-link" :to="{ name: 'patients' }">Пациенты</router-link>
         <router-link class="nav-link" :to="{ name: 'doctors' }">Врачи</router-link>
         <router-link class="nav-link" :to="{ name: 'sensors' }">Датчики</router-link>

@@ -8,7 +8,7 @@
                         <b-row>
                             <b-col cols=10>
                                 <slot name='header'>
-                                    <p>Выходит Маяковский из кабака, окруженный стайкой девиц</p>
+                                    <p>Заголовок</p>
                                 </slot>
                             </b-col>
                             <b-col cols=2>
@@ -25,12 +25,7 @@
                         <b-container fluid>
                             <b-row>
                                 <b-col cols=8>
-                                    <p>Лежит</p>
-                                    <p>Безжизненное</p>
                                     <p>Тело</p>
-                                    <p>На нашем</p>
-                                    <p>Жизненном</p>
-                                    <p>Пути.</p>
                                 </b-col>
                             </b-row>
                         </b-container>
@@ -39,7 +34,7 @@
 
                 <div class="modal-footer">
                     <slot name='footer'>
-                        <p>Маяковский и Есенин</p>
+                        <p>footer</p>
                     </slot>
                 </div>
             </div>

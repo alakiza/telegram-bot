@@ -2352,11 +2352,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: 'modal',
   methods: {
@@ -3342,15 +3337,14 @@ var store = new vuex__WEBPACK_IMPORTED_MODULE_2__.default.Store({
       state.currentUser = Object.assign({}, payload.user, {
         token: payload.access_token
       });
-      localStorage.setItem('token', payload.data.access_token); // localStorage.setItem("user", JSON.stringify(state.currentUser));
+      localStorage.setItem('token', payload.data.access_token);
     },
     loginFailed: function loginFailed(state, payload) {
       state.loading = false;
       state.auth_error = payload.error;
     },
     logout: function logout(state) {
-      localStorage.removeItem("token"); // localStorage.removeItem("user");
-
+      localStorage.removeItem("token");
       state.isLoggedin = false;
       state.currentUser = null;
       console.log('logout');
@@ -51492,8 +51486,8 @@ var render = function() {
             {
               attrs: {
                 toggleable: "lg",
-                type: "light",
-                variant: "light",
+                type: "dark",
+                variant: "dark",
                 sticky: ""
               }
             },
@@ -51651,15 +51645,7 @@ var render = function() {
                     _c(
                       "b-col",
                       { attrs: { cols: "10" } },
-                      [
-                        _vm._t("header", [
-                          _c("p", [
-                            _vm._v(
-                              "Выходит Маяковский из кабака, окруженный стайкой девиц"
-                            )
-                          ])
-                        ])
-                      ],
+                      [_vm._t("header", [_c("p", [_vm._v("Заголовок")])])],
                       2
                     ),
                     _vm._v(" "),
@@ -51697,17 +51683,7 @@ var render = function() {
                     "b-row",
                     [
                       _c("b-col", { attrs: { cols: "8" } }, [
-                        _c("p", [_vm._v("Лежит")]),
-                        _vm._v(" "),
-                        _c("p", [_vm._v("Безжизненное")]),
-                        _vm._v(" "),
-                        _c("p", [_vm._v("Тело")]),
-                        _vm._v(" "),
-                        _c("p", [_vm._v("На нашем")]),
-                        _vm._v(" "),
-                        _c("p", [_vm._v("Жизненном")]),
-                        _vm._v(" "),
-                        _c("p", [_vm._v("Пути.")])
+                        _c("p", [_vm._v("Тело")])
                       ])
                     ],
                     1
@@ -51723,7 +51699,7 @@ var render = function() {
         _c(
           "div",
           { staticClass: "modal-footer" },
-          [_vm._t("footer", [_c("p", [_vm._v("Маяковский и Есенин")])])],
+          [_vm._t("footer", [_c("p", [_vm._v("footer")])])],
           2
         )
       ])
@@ -51766,7 +51742,7 @@ var render = function() {
               _c(
                 "b-button",
                 {
-                  attrs: { variant: "outline-primary", id: "show-modal" },
+                  attrs: { variant: "light", id: "show-modal" },
                   on: { click: _vm.ShowAddDialog }
                 },
                 [_vm._v("➕")]
@@ -51959,7 +51935,7 @@ var render = function() {
               _c(
                 "b-button",
                 {
-                  attrs: { variant: "outline-primary", id: "show-modal" },
+                  attrs: { variant: "light", id: "show-modal" },
                   on: { click: _vm.ShowAddDialog }
                 },
                 [_vm._v("➕")]
@@ -52101,7 +52077,7 @@ var render = function() {
               _c(
                 "b-button",
                 {
-                  attrs: { variant: "outline-primary", id: "show-modal" },
+                  attrs: { variant: "light", id: "show-modal" },
                   on: { click: _vm.ShowAddDialog }
                 },
                 [_vm._v("➕")]

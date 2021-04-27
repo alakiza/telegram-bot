@@ -42,17 +42,3 @@ Route::middleware(['auth:api'])->group(function() {
         Route::put('/update', 'SensorsController@UpdateSensors');
     });
 });
-
-// Route::middleware(['auth:api'])->group(function() {
-
-//     Route::prefix('patients')->group(function () {
-//         Route::get('/get', 'PatientController@GetPatients');
-//         Route::post('/delete', 'PatientController@DeletePatients');
-//         Route::put('/update', 'PatientController@UpdatePatients');
-//     });
-// });
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-

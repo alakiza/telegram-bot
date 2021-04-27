@@ -2,7 +2,7 @@
     <b-container fluid>
         <b-row>
             <b-col>
-                <b-button variant="outline-primary" id="show-modal" @click="ShowAddDialog">➕</b-button>
+                <b-button variant="light" id="show-modal" @click="ShowAddDialog">➕</b-button>
             </b-col>
 
             <add-dialog v-if="showModal" 

@@ -46,7 +46,6 @@ export const store = new Vuex.Store({
             state.loading = false;
             state.currentUser = Object.assign({}, payload.user, {token: payload.access_token});
             localStorage.setItem('token', payload.data.access_token);
-            // localStorage.setItem("user", JSON.stringify(state.currentUser));
         },
         loginFailed(state, payload){
             state.loading = false;
@@ -54,7 +53,6 @@ export const store = new Vuex.Store({
         },
         logout(state){
             localStorage.removeItem("token");
-            // localStorage.removeItem("user");
             state.isLoggedin = false;
             state.currentUser = null;
             console.log('logout')

@@ -81,15 +81,11 @@ class BotController extends Controller
                 }
             }
 
-            Log::info($dialog_path);
-
             $config_path = $this->generateConfigPathByDialogPath($dialog_path);
             
             $context_commands = config($config_path.".commands");
-            Log::info($context_commands);
             foreach($context_commands as $command_name => $command_config) {
                 if (mb_stripos($mtext, $command_config['text']) !== false) {
-                    Log::info($config_path.".commands.".$command_name);
                     $this->executeCommand($config_path.".commands.".$command_name, $message);
 
                     if (! $command_config['is_stub']) {
