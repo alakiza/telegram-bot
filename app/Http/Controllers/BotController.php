@@ -45,10 +45,6 @@ class BotController extends Controller
 
     function generateConfigPathByDialogPath(Array $dialog_path)
     {
-        // $config_path = "telegram.commands";
-        // foreach($dialog_path as $cmd) {
-        //     $config_path = $config_path.".".$cmd.".commands";
-        // }
         $config_path = "telegram";
         foreach($dialog_path as $cmd) {
             $config_path = $config_path.".commands.".$cmd;
@@ -56,56 +52,65 @@ class BotController extends Controller
         return $config_path;
     }
 
+    function sendSorry($chatId) {
+        $answer = "Доступ запрещён.\nВас нет в списке пользователей.\nОбратитесь к администратору.";
+
+        $this->bot->sendMessage($chatId, $answer, 'HTML', true, null, null);
+    }
+
     function contextSwitcher($Update) {
         $message = $Update->getMessage();
-        $mtext = $message->getText();
-        $cid = $message->getChat()->getId();
+        if ($message !== null) {
+            $mtext = $message->getText();
+            $cid = $message->getChat()->getId();
 
-        $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
+            $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
 
-        $dialog_path = [];
+            $dialog_path = [];
 
-        if (empty($users)) {
-            DB::table('telegram_users')->insert(["user_id" => $cid, "dialog_path" => "", "dialog_params" => ""]);
-        } else {
-            $user_dialog_path = $users[0]->dialog_path;
-            if (empty($user_dialog_path))
-            {
-                $dialog_path = [];
+            if (empty($users)) {
+                $this->sendSorry($cid);
+                return;
             } else {
-                $dialog_path = explode(".", $user_dialog_path);
+                $user_dialog_path = $users[0]->dialog_path;
+                if (empty($user_dialog_path))
+                {
+                    $dialog_path = [];
+                } else {
+                    $dialog_path = explode(".", $user_dialog_path);
+                }
             }
-        }
 
-        Log::info($dialog_path);
+            Log::info($dialog_path);
 
-        $config_path = $this->generateConfigPathByDialogPath($dialog_path);
-        // $config_path = "telegram.commands";
-        // foreach($dialog_path as $cmd) {
-        //     $config_path = $config_path.".".$cmd.".commands";
-        // }
-        
-        $context_commands = config($config_path.".commands");
+            $config_path = $this->generateConfigPathByDialogPath($dialog_path);
+            
+            $context_commands = config($config_path.".commands");
+            Log::info($context_commands);
+            foreach($context_commands as $command_name => $command_config) {
+                if (mb_stripos($mtext, $command_config['text']) !== false) {
+                    Log::info($config_path.".commands.".$command_name);
+                    $this->executeCommand($config_path.".commands.".$command_name, $message);
 
-        foreach($context_commands as $command_name => $command_config) {
-            if (mb_stripos($mtext, $command_config['text']) !== false) {
-                $this->executeCommand($config_path.".commands.".$command_name, $message);
+                    if (! $command_config['is_stub']) {
+                        array_push($dialog_path, $command_name);
 
-                array_push($dialog_path, $command_name);
-
-                DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => implode(".", $dialog_path)]);
+                        DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => implode(".", $dialog_path)]);
+                    }
+                    return;
+                }
             }
-        }
-        if (mb_stripos($mtext, config("telegram.goBack")) !== false) {
+            if (mb_stripos($mtext, config("telegram.goBack")) !== false) {
 
-            if (count($dialog_path) > 1) {
-                unset($dialog_path[array_key_last($dialog_path)]);
+                if (count($dialog_path) > 1) {
+                    unset($dialog_path[array_key_last($dialog_path)]);
 
-                $config_path = $this->generateConfigPathByDialogPath($dialog_path);   
-                $this->executeCommand($config_path, $message);
+                    $config_path = $this->generateConfigPathByDialogPath($dialog_path);   
+                    $this->executeCommand($config_path, $message);
 
-                DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => implode(".", $dialog_path)]); 
-            };
+                    DB::table('telegram_users')->where("user_id", "=", $cid)->update(["dialog_path" => implode(".", $dialog_path)]); 
+                };
+            }
         }
         
     }
@@ -121,7 +126,7 @@ class BotController extends Controller
             try {
                 $this->bot->run();
             } catch (\Exception $e) {
-                // можно добавить функцию уведомления администратора о возможных ошибках
+                Log::info($e);
             }
         }
     }

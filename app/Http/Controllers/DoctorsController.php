@@ -24,7 +24,11 @@ class DoctorsController extends Controller
         }
 
         foreach ($doctors as $doctor) {
-            $doctor->telegram_user = $tmp_users[$doctor->telegram_user];
+            if (isset($tmp_users[$doctor->telegram_user])) {
+                $doctor->telegram_user = $tmp_users[$doctor->telegram_user];
+            } else {
+                $doctor->telegram_user = "";
+            }
         }
 
         return $doctors;
@@ -93,7 +97,7 @@ class DoctorsController extends Controller
         $telegram_user_id = 0;
 
         if(empty($telegram_users)) {
-            $telegram_user_id = DB::table('telegram_users')->insertGetId(['user_id' => $data["telegram_user"], 
+            $telegram_user_id = DB::table('telegram_users')->insertGetId(['user_id' => $data["new"]["telegram_user"], 
                                                                           "dialog_path" => "",
                                                                           "dialog_params" => ""]);
         } else {

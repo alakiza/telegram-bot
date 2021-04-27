@@ -11,7 +11,7 @@ use TelegramBot\Api\Types\Inline\InlineKeyboardMarkup; // использован
 
 use App\Http\Controllers\BaseBotController;
 
-class GetPatientDataController extends BaseBotController
+class GetDoctorDataController extends BaseBotController
 {
     public function processCmd($controller_config_path, $message) 
     {
@@ -26,23 +26,16 @@ class GetPatientDataController extends BaseBotController
                        ->get()->toArray();
 
         if (! empty($doctors)) {
-            
             $doctor = $doctors[0];
-            $answer = "Ваши пациенты:\n\n";
+            
+            $answer = "$doctor->surname $doctor->name $doctor->patronymic\n";
+            $answer = $answer."Специальность - $doctor->spetialization\n";
+            $answer = $answer."telegram id - $doctor->user_id\n";
 
-            $patients = DB::table('patients')
-                            ->join('chambers', 'chambers.id', '=', 'patients.chamber')
-                            ->where('id_doctors', '=', $doctor->id)
-                            ->select('patients.*', 'chambers.chamber_num')
-                            ->get()->toArray();
-
-            foreach($patients as $patient) {
-                $answer = $answer.$patient->surname." ".$patient->name." ".$patient->patronymic."\n  Поступил ".$patient->receipt_date."\n  Палата ".$patient->chamber_num."\n\n";
-            }
-
-            $keyboard = $this->generateKeyboard($controller_config_path, $message);
-
-            $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
+            $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML');
+        } else {
+            $answer = "Не удалось найти данные о Вас";
+            $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML');
         }
     }
 }

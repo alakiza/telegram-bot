@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+
 use Illuminate\Http\Request;
 
 use TelegramBot\Api\Types\ReplyKeyboardMarkup; // использование ReplyKeyboardMarkup (основное меню)
@@ -16,11 +18,22 @@ class StartupController extends BaseBotController
     {
         $self_config = config($controller_config_path);
 
-        $answer = 'Добро пожаловать';
+        $cid = $message->getChat()->getId();
+        Log::info($cid);
+        $users = DB::table('telegram_users')->where("user_id", "=", $cid)->get()->toArray();
+        Log::info($users);
+        if (! empty($users)) {
+            $doctors = DB::table('doctors')->where("telegram_user", "=", $users[0]->id)->get()->toArray();
+            Log::info($doctors);
+            if (! empty($doctors)) {
+                $doctor = $doctors[0];
+                $answer = 'Добро пожаловать, '.$doctor->surname." ".$doctor->name." ".$doctor->patronymic;
 
-        $keyboard = $this->generateKeyboard($controller_config_path, $message);
+                $keyboard = $this->generateKeyboard($controller_config_path, $message);
 
-        $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
+                $this->bot->sendMessage($message->getChat()->getId(), $answer, 'HTML', true, null, $keyboard);
+            }
+        }
 
         return;
     }
